@@ -50,7 +50,20 @@ const cargaPacientes = (e) => {
     telefono: TELEFONO,
   }));
   guardar();
-  alert ("AGREGADO");
+  Toastify({
+    text: `Paciente ${APELLIDO.toUpperCase()} agregado exitosamente`,
+    duration: 1000,
+    destination: "https://github.com/apvarun/toastify-js",
+    newWindow: true,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "center", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    },
+    onClick: function(){} // Callback after click
+  }).showToast();
   limpiarForm ();
 }
 //--------------------------------------FUNCIONES---------------------------------------------------------
@@ -68,11 +81,15 @@ function busqPorId(){
   let idConsulta = Number (prompt ("Ingrese ID del Paciente"));
   const person = consultorio.find(p => p.id === idConsulta);
   if (person) {
-                  alert (`${person.id}- ${person.nombre} ${person.apellido}\n Edad:${person.edad}\n La agenda es: ${person.agenda}`);
+                  Swal.fire (`${person.id}- ${person.nombre} ${person.apellido}\n Edad:${person.edad}\n La agenda es: ${person.agenda}`);
                   return [true,person.id]
   } else {
-                  alert (`No existe el paciente en el consultorio`);
-  }               
+                  Swal.fire({
+                  icon: 'error',
+                  title: 'No existe el Paciente',
+                  text: 'Intente agregarlo',
+                  })
+  }             
 }
 
 function guardar() {
