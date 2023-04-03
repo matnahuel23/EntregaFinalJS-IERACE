@@ -1,0 +1,17 @@
+{
+  "name": "entregafinal",
+  "version": "1.0.0",
+  "description": "entregaFinalJS+IERACE",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass",
+    "sass:watch": "sass --watch scss/style.scss css/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "IERACE, Matias Nahuel",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "sass": "^1.60.0"
+  }
+}
