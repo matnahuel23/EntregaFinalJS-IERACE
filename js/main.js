@@ -1,11 +1,11 @@
 // Crear el formulario principal
 let form = document.createElement("form");
 // creo e inicializo variables que voy a usar
-const consultorio = [];
+const consultorio = JSON.parse(localStorage.getItem('clinica')) || [];
 const fechaActual = new Date();
 // inicializo Id
 let id = 1;
-const clinica = JSON.parse(localStorage.getItem('clinica')) || [];
+id = consultorio.length + id;
 //--------------------------------------OBJETO PACIENTE-----------------------------------------
 class Paciente {
     constructor (info) {
@@ -151,7 +151,11 @@ function mostrar(){
       });
       document.body.appendChild(lista);
     } else {
-      console.log('No hay Pacientes almacenados');
+        Swal.fire({
+        icon: 'error',
+        title:'Consultorio vacio',
+        text: 'No hay pacientes almacenados',
+        })
     }
 }
 //-----------------------------------Creo Inputs con sus propiedades-----------------------------
