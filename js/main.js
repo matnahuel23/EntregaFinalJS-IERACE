@@ -6,7 +6,6 @@ const fechaActual = new Date();
 // inicializo Id
 let id = 1;
 id = consultorio.length + id;
-
 // API para tener feriados del año en la Argentina
 const apiKey = "f6512b99426294cacaf287d9e27d9c1655f50fe2";
 const country = "AR";
@@ -156,6 +155,7 @@ function mostrar(){
         lista.appendChild(item);
       });
       document.body.appendChild(lista);
+      tiempoRecarga();
     } else {
         Swal.fire({
         icon: 'error',
@@ -172,13 +172,20 @@ function mostrarFeriados(){
     const lista = document.createElement('ul');
     data.response.holidays.forEach(holiday => {
       const item = document.createElement('li');
-      item.textContent = JSON.stringify (holiday.date.iso + " - " + holiday.description);
+      item.textContent = JSON.stringify ( holiday.date.iso + " - " + holiday.description);
       lista.appendChild(item);
     });
     document.body.appendChild(lista);
-    setTimeout(actualizarInfo, 10000);
+    tiempoRecarga();
   })
   .catch(error => console.log(error));
+}
+
+// A los 5 segundos se actualizara
+function tiempoRecarga(){
+  setTimeout(function() {
+    location.reload();
+  }, 5000);
 }
     
 //-----------------------------------Creo Inputs con sus propiedades-----------------------------
