@@ -122,7 +122,7 @@ function guardar() {
 }
 
 function unicoPaciente (dniConsulta){
-  let existe;
+  let existe= false;
   const person = consultorio.some(p => p.dni == dniConsulta);
   if (person) {
                   existe = true;
