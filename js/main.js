@@ -5,7 +5,7 @@ const consultorio = [];
 const fechaActual = new Date();
 // inicializo Id
 let id = 1;
-
+const clinica = JSON.parse(localStorage.getItem('clinica')) || [];
 //--------------------------------------OBJETO PACIENTE-----------------------------------------
 class Paciente {
     constructor (info) {
@@ -41,29 +41,48 @@ const cargaPacientes = (e) => {
   let NACIMIENTO = formulario.children[3].value;
   let EMAIL = formulario.children[4].value;
   let TELEFONO = formulario.children[5].value;
-  consultorio.push(new Paciente({
-    dni:DNI,
-    nombre: NOMBRE,
-    apellido:APELLIDO,
-    nacimiento:NACIMIENTO,
-    email: EMAIL,
-    telefono: TELEFONO,
-  }));
-  guardar();
-  Toastify({
-    text: `Paciente ${APELLIDO.toUpperCase()} agregado exitosamente`,
-    duration: 1000,
-    destination: "https://github.com/apvarun/toastify-js",
-    newWindow: true,
-    close: true,
-    gravity: "top", // `top` or `bottom`
-    position: "center", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-    onClick: function(){} // Callback after click
-  }).showToast();
+  if (unicoPaciente(DNI)){
+      Swal.fire({
+                  icon: 'error',
+                  title:'No se pudo agregar al Paciente',
+                  text: 'El número de DNI pertenece a otro paciente',
+      })
+  }
+  else{
+        const nuevoPaciente = new Paciente({
+                                      dni:DNI,
+                                      nombre: NOMBRE,
+                                      apellido:APELLIDO,
+                                      nacimiento:NACIMIENTO,
+                                      email: EMAIL,
+                                      telefono: TELEFONO,
+        });
+        if (noNulos(nuevoPaciente)){
+            Swal.fire({
+            icon: 'error',
+            title:'No se pudo agregar al Paciente',
+            text: 'Faltan Datos',
+            })
+        }
+        else{    
+            consultorio.push(nuevoPaciente);
+            guardar();
+            Toastify({
+                      text: `Paciente ${APELLIDO.toUpperCase()} agregado exitosamente`,
+                      duration: 1000,
+                      destination: "https://github.com/apvarun/toastify-js",
+                      newWindow: true,
+                      close: true,
+                      gravity: "top", // `top` or `bottom`
+                      position: "center", // `left`, `center` or `right`
+                      stopOnFocus: true, // Prevents dismissing of toast on hover
+                      style: {
+                      background: "linear-gradient(to right, #00b09b, #96c93d)",
+                      },
+                      onClick: function(){} // Callback after click
+            }).showToast();
+        }
+}
   limpiarForm ();
 }
 //--------------------------------------FUNCIONES---------------------------------------------------------
@@ -76,7 +95,7 @@ function limpiarForm (){
   inputEmail.value = '';
   inputTel.value = '';
 }
-//buscvo 1 paciente por ID
+//busco 1 paciente por ID
 function busqPorId(){
   let idConsulta = Number (prompt ("Ingrese ID del Paciente"));
   const person = consultorio.find(p => p.id === idConsulta);
@@ -97,6 +116,27 @@ function guardar() {
   localStorage.setItem("clinica", JSON.stringify(consultorio));
 }
 
+function unicoPaciente (dniConsulta){
+  let existe;
+  const person = consultorio.some(p => p.dni == dniConsulta);
+  if (person) {
+                  existe = true;
+                  return existe
+  } else {
+                  return existe
+  }   
+}
+
+function noNulos (objeto){
+  const nulo = Object.values(objeto).some(value => value === null || value === '');
+  if (nulo){
+    return true
+  }
+  else {
+    return false
+  }
+}
+
 function mostrar(){
     // Obtener los datos almacenados en localStorage
     const consultorioLS = JSON.parse(localStorage.getItem('clinica'));
@@ -113,7 +153,7 @@ function mostrar(){
     } else {
       console.log('No hay Pacientes almacenados');
     }
-  }
+}
 //-----------------------------------Creo Inputs con sus propiedades-----------------------------
 // Crear el input de dni
 let inputDni = document.createElement("input");
