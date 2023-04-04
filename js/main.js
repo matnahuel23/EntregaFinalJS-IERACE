@@ -6,6 +6,12 @@ const fechaActual = new Date();
 // inicializo Id
 let id = 1;
 id = consultorio.length + id;
+
+// API para tener feriados del año en la Argentina
+const apiKey = "f6512b99426294cacaf287d9e27d9c1655f50fe2";
+const country = "AR";
+const year = "2023";
+
 //--------------------------------------OBJETO PACIENTE-----------------------------------------
 class Paciente {
     constructor (info) {
@@ -158,6 +164,23 @@ function mostrar(){
         })
     }
 }
+
+function mostrarFeriados(){
+  fetch(`https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`)
+  .then(response => response.json())
+  .then(data => {
+    const lista = document.createElement('ul');
+    data.response.holidays.forEach(holiday => {
+      const item = document.createElement('li');
+      item.textContent = JSON.stringify (holiday.date.iso + " - " + holiday.description);
+      lista.appendChild(item);
+    });
+    document.body.appendChild(lista);
+    setTimeout(actualizarInfo, 10000);
+  })
+  .catch(error => console.log(error));
+}
+    
 //-----------------------------------Creo Inputs con sus propiedades-----------------------------
 // Crear el input de dni
 let inputDni = document.createElement("input");
@@ -210,6 +233,11 @@ const botonMostrar = document.createElement('button');
 botonMostrar.type = 'button';
 botonMostrar.textContent = 'Mostrar';
 
+//Creo boton Feriados
+const botonFeriados = document.createElement('button');
+botonFeriados.type = 'button';
+botonFeriados.textContent = 'Feriados';
+
 //****************************************FIN BOTONES**************************************
 // cierro los inputs del formulario
 form.appendChild(inputDni);
@@ -221,6 +249,7 @@ form.appendChild(inputTel);
 form.appendChild(botonAgregar);
 form.appendChild(botonConsultar);
 form.appendChild(botonMostrar);
+form.appendChild(botonFeriados);
 
 //************************Cierro el formulario******************************
 document.body.appendChild(form);
@@ -228,3 +257,4 @@ document.body.appendChild(form);
 form.addEventListener("submit", cargaPacientes);
 botonConsultar.addEventListener("click", () => busqPorId());
 botonMostrar.addEventListener("click", () => mostrar());
+botonFeriados.addEventListener("click", () => mostrarFeriados ());
